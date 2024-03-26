@@ -27,8 +27,8 @@ const getImages = async () => {
         },
         body: JSON.stringify({
             "engine_id": "stable-diffusion-xl-1024-v1-0",
-            "height": 768,
-            "width": 1344,
+            "height": 1024,
+            "width": 1024,
             "text_prompts": [
                 {
                     "text": promptText,
