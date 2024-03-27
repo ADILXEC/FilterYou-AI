@@ -1,7 +1,8 @@
 const API_KEY = "sk-26bcY9xYmBCgN8KyIOov6faWV68nyIVOHJuCxh7A55wyXYqG";
+
 const submitIcon = document.querySelector("#submit-icon");
-const regenerateButton = document.querySelector("#regenerate-button");
 const imagesSection = document.querySelector(".images-section");
+
 const inputElement = document.querySelector("#inputPrompt");
 
 const getImages = async () => {
@@ -12,13 +13,9 @@ const getImages = async () => {
         return;
     }
 
-    // Show loading indicator
-    const loadingIndicator = document.querySelector('#loading-indicator');
-    loadingIndicator.style.display = 'block';
-
     console.log(JSON.stringify({
         "text_prompts": promptText,
-        "n": 1,
+        "n": 4,
         "size": "512x512"
     }));
 
@@ -53,9 +50,6 @@ const getImages = async () => {
 
         console.log(data); // Log the response data
 
-        // Hide loading indicator after fetching response
-        loadingIndicator.style.display = 'none';
-
         if (response.ok) {
             console.log(data);
             if (data.artifacts && data.artifacts.length > 0) {
@@ -79,18 +73,3 @@ const getImages = async () => {
 
 submitIcon.addEventListener('click', getImages);
 
-regenerateButton.addEventListener('click', () => {
-    // Clear the images section
-    imagesSection.innerHTML = '';
-    
-    // Reset the input field
-    inputElement.value = '';
-});
-
-// Add event listener for Enter key press
-inputElement.addEventListener('keydown', (event) => {
-    if (event.key === 'Enter') {
-        event.preventDefault(); // Prevent default form submission behavior
-        getImages(); // Call the getImages function when Enter is pressed
-    }
-});
