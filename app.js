@@ -5,6 +5,13 @@ const imagesSection = document.querySelector(".images-section");
 
 const inputElement = document.querySelector("#inputPrompt");
 
+inputElement.addEventListener('keypress', (event) => {
+    if (event.key === 'Enter') {
+        event.preventDefault();
+        getImages();
+    }
+});
+
 const getImages = async () => {
     const promptText = inputElement.value.trim();
 
@@ -13,11 +20,9 @@ const getImages = async () => {
         return;
     }
 
-    console.log(JSON.stringify({
-        "text_prompts": promptText,
-        "n": 4,
-        "size": "512x512"
-    }));
+    // Show the "Generating..." text
+    const generatingTextElement = document.querySelector("#generating-text");
+    generatingTextElement.style.display = "block";
 
     const options = {
         method: "POST",
@@ -48,8 +53,6 @@ const getImages = async () => {
         const response = await fetch('https://api.stability.ai/v1/generation/stable-diffusion-xl-1024-v1-0/text-to-image', options);
         const data = await response.json();
 
-        console.log(data); // Log the response data
-
         if (response.ok) {
             console.log(data);
             if (data.artifacts && data.artifacts.length > 0) {
@@ -68,8 +71,20 @@ const getImages = async () => {
         }
     } catch (error) {
         console.error(error);
+    } finally {
+        // Hide the "Generating..." text
+        generatingTextElement.style.display = "none";
     }
 };
 
 submitIcon.addEventListener('click', getImages);
 
+document.addEventListener('DOMContentLoaded', () => {
+    const icons = document.querySelectorAll('.floating-icon');
+    icons.forEach(icon => {
+        const randomX = Math.random() * window.innerWidth;
+        const randomY = Math.random() * window.innerHeight;
+        icon.style.setProperty('--randomX', randomX);
+        icon.style.setProperty('--randomY', randomY);
+    });
+});
